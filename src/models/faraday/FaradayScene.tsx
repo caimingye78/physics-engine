@@ -10,7 +10,7 @@ const MAX_FRAME_TIME = 0.1;
 const SAMPLE_INTERVAL = 0.1;
 
 // 灯泡亮度的饱和映射: P/(P+Pref) ∈ [0,1), 防止大功率时过曝, 小功率时仍可分辨
-const P_REF = 30000;
+const P_REF = 6000;
 const MAX_EMISSIVE = 4;
 
 export interface FaradaySample {

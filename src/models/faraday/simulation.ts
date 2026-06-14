@@ -17,11 +17,14 @@ export interface FaradayParams {
   initialOmega: number; // 初始角速度 (rad/s)
 }
 
+// 默认参数选取使衰减时间常数 τ≈2.2s, 让减速过程可观赏 ~8s(而非旧值 0.05s 瞬间停)。
+// 想看"电磁刹车": 把 B 调大, k∝B² 暴增, 圆盘会被瞬间刹停。
+// 想看永不停: 把 B 调到 0, 无阻力矩。
 export const DEFAULT_PARAMS: FaradayParams = {
-  B: 1.2,
-  mass: 2.0,
-  resistance: 0.5,
-  initialOmega: 20,
+  B: 0.6,
+  mass: 5.0,
+  resistance: 2.0,
+  initialOmega: 25,
 };
 
 export interface FaradayState {
