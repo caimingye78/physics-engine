@@ -28,7 +28,7 @@ export default function DualRodSandbox() {
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', background: '#0c0c10' }}>
-      <Canvas camera={{ position: [22, 16, 24], fov: 45 }}>
+      <Canvas camera={{ position: [34, 30, 64], fov: 45 }}>
         <RodScene params={params} resetKey={resetKey} />
       </Canvas>
 

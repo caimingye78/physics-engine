@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import CyclotronScene from './CyclotronScene';
 import type { CyclotronSample } from './CyclotronScene';
+import TelemetryChart from './TelemetryChart';
 import ControlPanel from '../../components/ControlPanel';
 import type { SliderSpec } from '../../components/ControlPanel';
 import type { CyclotronParams } from './simulation';
@@ -42,7 +43,7 @@ export default function CyclotronSandbox() {
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%', background: '#06060a' }}>
-      <Canvas camera={{ position: [0, 32, 38], fov: 45 }}>
+      <Canvas camera={{ position: [0, 48, 56], fov: 45 }}>
         <CyclotronScene params={params} resetKey={resetKey} onSample={setSample} />
       </Canvas>
 
@@ -79,6 +80,7 @@ export default function CyclotronSandbox() {
             粒子迟到 → 穿缝时电场已反向 → 失步被减速, 速率锁死在 c 附近(加速天花板)。
           </div>
         </div>
+        <TelemetryChart />
       </aside>
     </div>
   );

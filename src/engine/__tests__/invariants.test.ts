@@ -15,6 +15,15 @@ import {
   C_LIGHT,
 } from '../../models/cyclotron/simulation';
 import type { CyclotronParams } from '../../models/cyclotron/simulation';
+import {
+  DEFAULT_PARAMS as MS_DEFAULT,
+  MASSES,
+  selectedSpeed,
+  radiusFor,
+  spawn,
+  stepParticle,
+  hasLanded,
+} from '../../models/mass_spec/simulation';
 
 // 类型安全 ≠ 物理守恒。下面用不变量断言来保证物理正确性,
 // 这才是"重构物理公式的真正底气"。
@@ -95,5 +104,35 @@ describe('回旋加速器(相对论): 不变量', () => {
     }
     expect(vMax).toBeGreaterThan(20); // 确实被显著加速(初速 3)
     expect(vMax).toBeLessThan(C_LIGHT); // 但被锁死在 c 之下
+  });
+});
+
+
+describe('质谱仪: 速度选择与质量分离', () => {
+  it('通过速度 v = E/B, 半径与质量成正比 r = mv/(qB)', () => {
+    const p = MS_DEFAULT;
+    expect(selectedSpeed(p)).toBeCloseTo(p.E / p.B, 10);
+    const r2 = radiusFor(p, 2);
+    const r4 = radiusFor(p, 4);
+    expect(r4 / r2).toBeCloseTo(2, 6); // 质量翻倍, 半径翻倍
+  });
+
+  it('离子做半圆后落点 z ≈ 2r(按质量分离)', () => {
+    const p = MS_DEFAULT;
+    const mass = MASSES[1];
+    const dt = 1 / 960;
+    let part = spawn(p);
+    let landedZ = -1;
+    for (let i = 0; i < 200000; i++) {
+      const next = stepParticle(p, mass, part, dt);
+      // 进入偏转区后第一次回到 x<=0 即落点
+      if (hasLanded(next)) {
+        landedZ = next.z;
+        break;
+      }
+      part = next;
+    }
+    expect(landedZ).toBeGreaterThan(0);
+    expect(landedZ).toBeCloseTo(2 * radiusFor(p, mass), 1); // 落点 ≈ 2r
   });
 });

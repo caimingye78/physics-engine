@@ -12,13 +12,14 @@ import {
   gamma,
   beta,
 } from './simulation';
+import { cyclotronTelemetryStore } from './store';
 
 const PHYSICS_DT = 1 / 480; // 高频交变电场 + 圆周运动, 用更细步长保证相位与半径精度
 const MAX_FRAME_TIME = 0.1;
-const SAMPLE_INTERVAL = 0.1;
-const ESCAPE_RADIUS = 24; // 粒子飞出此半径则自动重新发射
-const DEE_W = 22;
-const DEE_DEPTH = 52;
+const SAMPLE_INTERVAL = 0.08;
+const ESCAPE_RADIUS = 34; // 粒子飞出此半径则自动重新发射(调大以便 β 爬得更高再重发)
+const DEE_W = 34;
+const DEE_DEPTH = 74;
 
 export interface CyclotronSample {
   speed: number;
@@ -49,6 +50,7 @@ export default function CyclotronScene({ params, resetKey, onSample }: Props) {
     stateRef.current = createInitialState(paramsRef.current);
     accRef.current = 0;
     lastSampleRef.current = 0;
+    cyclotronTelemetryStore.reset();
   }, [resetKey]);
 
   useFrame((_, delta) => {
@@ -59,10 +61,12 @@ export default function CyclotronScene({ params, resetKey, onSample }: Props) {
     }
     const s = stateRef.current;
 
-    // 逃逸检测: 飞出加速腔则重新发射并清空轨迹
+    // 逃逸检测: 飞出加速腔则重新发射并清空轨迹与曲线
     if (Math.hypot(s.x, s.z) > ESCAPE_RADIUS) {
       stateRef.current = createInitialState(paramsRef.current);
       accRef.current = 0;
+      lastSampleRef.current = 0;
+      cyclotronTelemetryStore.reset();
       setEpoch((e) => e + 1);
       return;
     }
@@ -70,12 +74,10 @@ export default function CyclotronScene({ params, resetKey, onSample }: Props) {
     if (particle.current) particle.current.position.set(s.x, 0, s.z);
 
     if (s.t - lastSampleRef.current >= SAMPLE_INTERVAL) {
-      onSample({
-        speed: speed(s),
-        radius: gyroRadius(paramsRef.current, s),
-        gamma: gamma(s),
-        beta: beta(s),
-      });
+      const b = beta(s);
+      const g = gamma(s);
+      onSample({ speed: speed(s), radius: gyroRadius(paramsRef.current, s), gamma: g, beta: b });
+      cyclotronTelemetryStore.push({ t: Number(s.t.toFixed(2)), beta: Number(b.toFixed(4)), gamma: Number(g.toFixed(4)) });
       lastSampleRef.current = s.t;
     }
   });

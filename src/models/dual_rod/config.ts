@@ -38,11 +38,12 @@ export const DEFAULT_PARAMS: DualRodParams = {
 export const MIN_RESISTANCE = 0.01;
 
 // ---- 3D 渲染几何常量 ----
-export const RAIL_LENGTH = 40; // 导轨长度 (m)
+export const RAIL_LENGTH = 200; // 导轨长度 (m), 加长以便长时间观察棒的运动与减速
 export const RAIL_RADIUS = 0.15;
 export const ROD_RADIUS = 0.3;
 export const ROD_Y = 0.3; // 杆中心离导轨平面的高度
-export const ZA_INITIAL = -10; // 杆 A 初始 Z 坐标
-export const ZB_INITIAL = 8; // 杆 B 初始 Z 坐标
-// 杆位置在 ±VIEW_HALF 内做循环显示(纯视觉, 不影响物理), 防止跑出视野
-export const VIEW_HALF = 18;
+export const ZA_INITIAL = -12; // 杆 A 初始 Z 坐标
+export const ZB_INITIAL = 10; // 杆 B 初始 Z 坐标
+// 杆位置在 ±VIEW_HALF 内做循环显示(纯视觉, 不影响物理), 防止跑出视野。
+// 取较大值, 让棒在循环回绕前能滑行很长距离(配合鼠标滚轮缩小可观察更久)。
+export const VIEW_HALF = 90;

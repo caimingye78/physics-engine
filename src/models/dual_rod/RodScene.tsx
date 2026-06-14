@@ -129,13 +129,13 @@ export default function RodScene({ params, resetKey }: SceneProps) {
 
       <Grid
         position={[0, -0.5, 0]}
-        args={[60, 60]}
+        args={[220, 220]}
         cellSize={1}
         cellThickness={0.6}
         cellColor="#2a2a2a"
         sectionSize={5}
         sectionColor="#444"
-        fadeDistance={70}
+        fadeDistance={160}
         infiniteGrid
       />
       <OrbitControls makeDefault enableDamping />
@@ -172,9 +172,10 @@ function Connector({ x1, x2 }: { x1: number; x2: number }) {
   );
 }
 
-/** 匀强磁场 B(沿 -Y 垂直向下)的可视化箭头阵列 */
+/** 匀强磁场 B(沿 -Y 垂直向下)的可视化箭头阵列, 沿加长后的导轨铺开 */
 function MagneticField() {
-  const positions = [-12, -6, 0, 6, 12];
+  const positions: number[] = [];
+  for (let z = -80; z <= 80; z += 16) positions.push(z);
   return (
     <group>
       {positions.map((z) => (
