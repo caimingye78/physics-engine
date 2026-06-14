@@ -1,11 +1,14 @@
 {
-  "name": "pe-tmp",
+  "name": "physics-engine",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "cp index.template.html index.html",
     "build": "tsc -b && vite build",
+    "postbuild": "rm -rf assets && cp -r dist/assets assets && cp dist/index.html index.html && cp dist/favicon.svg dist/icons.svg ./ && touch .nojekyll",
+    "test": "vitest run",
     "lint": "eslint .",
     "preview": "vite preview"
   },

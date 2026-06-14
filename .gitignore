@@ -22,4 +22,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# NOTE: docs/ 是 GitHub Pages 的发布产物, 必须纳入版本控制, 不要忽略。
+# 注意: 根目录的 index.html 与 assets/ 是 GitHub Pages 的发布产物(root 部署),
+#       必须纳入版本控制, 不要忽略。index.template.html 是 Vite 的源入口模板。
