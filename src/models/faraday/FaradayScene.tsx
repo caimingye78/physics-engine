@@ -71,21 +71,22 @@ export default function FaradayScene({ params, resetKey, onSample }: Props) {
 
   return (
     <>
-      <ambientLight intensity={0.15} />
-      <directionalLight position={[6, 16, 6]} intensity={0.4} />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[6, 16, 6]} intensity={1.0} />
+      <directionalLight position={[-8, 6, -4]} intensity={0.35} />
 
       {/* 中心固定转轴 */}
       <Cylinder args={[0.18, 0.18, 4, 16]} position={[0, 0, 0]}>
-        <meshStandardMaterial color="#666" metalness={0.9} roughness={0.3} />
+        <meshStandardMaterial color="#888" metalness={0.6} roughness={0.4} />
       </Cylinder>
 
       {/* 旋转的铜盘 + 红色测速辐条 */}
       <group ref={diskGroup}>
         <Cylinder args={[DISK_RADIUS, DISK_RADIUS, 0.25, 64]}>
-          <meshStandardMaterial color="#b87333" metalness={0.85} roughness={0.25} />
+          <meshStandardMaterial color="#d9863b" metalness={0.35} roughness={0.55} />
         </Cylinder>
         <Box args={[DISK_RADIUS, 0.28, 0.35]} position={[DISK_RADIUS / 2, 0, 0]}>
-          <meshStandardMaterial color="#ff3030" metalness={0.4} roughness={0.5} />
+          <meshStandardMaterial color="#ff3030" metalness={0.2} roughness={0.6} />
         </Box>
       </group>
 
